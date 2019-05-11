@@ -30,6 +30,7 @@ class PMCLogActivity : AppCompatActivity() {
             RecyclerView.VERTICAL,
             false
         )
+        layoutManager.stackFromEnd = true
         binding.recyclerviewLogs.layoutManager = layoutManager
 
         binding.recyclerviewLogs.addItemDecoration(
