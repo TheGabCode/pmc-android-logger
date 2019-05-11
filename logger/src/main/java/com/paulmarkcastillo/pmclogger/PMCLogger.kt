@@ -1,4 +1,4 @@
-package com.paulmarkcastillo.pmclogger.logger
+package com.paulmarkcastillo.pmclogger
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -6,9 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.paulmarkcastillo.pmclogger.PMCLog
-import com.paulmarkcastillo.pmclogger.PMCLogActivity
-import com.paulmarkcastillo.pmclogger.PMCLogDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,41 +17,52 @@ class PMCLogger {
         @SuppressLint("StaticFieldLeak")
         private lateinit var applicationContext: Context
         private val tag = "PMCLogger"
+        var enabled = true
         var printLogs = true
 
         // Initialize
 
         fun init(context: Context, printLogs: Boolean = true) {
-            this.applicationContext = context.applicationContext
-            this.printLogs = printLogs
+            applicationContext = context.applicationContext
+            Companion.printLogs = printLogs
             i(tag, "PMC Logger Initialized")
         }
 
         // Log Creation
 
         fun v(tag: String, msg: String) {
-            if (printLogs) Log.v(tag, msg)
-            addLog(Log.VERBOSE, tag, msg)
+            if (enabled) {
+                if (printLogs) Log.v(tag, msg)
+                addLog(Log.VERBOSE, tag, msg)
+            }
         }
 
         fun d(tag: String, msg: String) {
-            if (printLogs) Log.d(tag, msg)
-            addLog(Log.DEBUG, tag, msg)
+            if (enabled) {
+                if (printLogs) Log.d(tag, msg)
+                addLog(Log.DEBUG, tag, msg)
+            }
         }
 
         fun i(tag: String, msg: String) {
-            if (printLogs) Log.i(tag, msg)
-            addLog(Log.INFO, tag, msg)
+            if (enabled) {
+                if (printLogs) Log.i(tag, msg)
+                addLog(Log.INFO, tag, msg)
+            }
         }
 
         fun w(tag: String, msg: String) {
-            if (printLogs) Log.w(tag, msg)
-            addLog(Log.WARN, tag, msg)
+            if (enabled) {
+                if (printLogs) Log.w(tag, msg)
+                addLog(Log.WARN, tag, msg)
+            }
         }
 
         fun e(tag: String, msg: String) {
-            if (printLogs) Log.e(tag, msg)
-            addLog(Log.ERROR, tag, msg)
+            if (enabled) {
+                if (printLogs) Log.e(tag, msg)
+                addLog(Log.ERROR, tag, msg)
+            }
         }
 
         private fun addLog(priority: Int, tag: String, msg: String) {

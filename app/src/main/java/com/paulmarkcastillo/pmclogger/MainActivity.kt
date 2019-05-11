@@ -2,7 +2,6 @@ package com.paulmarkcastillo.pmclogger
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.paulmarkcastillo.pmclogger.logger.PMCLogger
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paulmarkcastillo.pmclogger.databinding.ActivityPmclogBinding
-import com.paulmarkcastillo.pmclogger.logger.PMCLogger
 import dmax.dialog.SpotsDialog
 
 class PMCLogActivity : AppCompatActivity() {
