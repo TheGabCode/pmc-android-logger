@@ -1,4 +1,4 @@
-package com.paulmarkcastillo.pmclogger
+package com.paulmarkcastillo.androidlogger
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.paulmarkcastillo.pmclogger.databinding.ListItemPmclogBinding
+import com.paulmarkcastillo.androidlogger.databinding.ListItemPmclogBinding
 import java.util.*
 
 class PMCLogAdapter : ListAdapter<PMCLog, PMCLogAdapter.ViewHolder>(

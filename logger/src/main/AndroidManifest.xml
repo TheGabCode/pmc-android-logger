@@ -1,7 +1,7 @@
 <manifest
         xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.paulmarkcastillo.pmclogger">
+        package="com.paulmarkcastillo.androidlogger">
     <application>
-        <activity android:name=".PMCLogActivity"/>
+        <activity android:name="com.paulmarkcastillo.androidlogger.PMCLogActivity"/>
     </application>
 </manifest>

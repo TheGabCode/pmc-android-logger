@@ -1,4 +1,4 @@
-package com.paulmarkcastillo.pmclogger
+package com.paulmarkcastillo.androidlogger
 
 import org.junit.Test
 

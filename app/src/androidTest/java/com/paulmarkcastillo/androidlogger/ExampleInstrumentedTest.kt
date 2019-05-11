@@ -1,4 +1,4 @@
-package com.paulmarkcastillo.pmclogger
+package com.paulmarkcastillo.androidlogger
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

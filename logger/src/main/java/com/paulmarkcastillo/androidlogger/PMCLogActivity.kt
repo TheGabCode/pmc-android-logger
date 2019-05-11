@@ -1,4 +1,4 @@
-package com.paulmarkcastillo.pmclogger
+package com.paulmarkcastillo.androidlogger
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.paulmarkcastillo.pmclogger.databinding.ActivityPmclogBinding
+import com.paulmarkcastillo.androidlogger.databinding.ActivityPmclogBinding
 import dmax.dialog.SpotsDialog
 
 class PMCLogActivity : AppCompatActivity() {

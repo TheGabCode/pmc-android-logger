@@ -1,4 +1,4 @@
-package com.paulmarkcastillo.pmclogger
+package com.paulmarkcastillo.androidlogger
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
