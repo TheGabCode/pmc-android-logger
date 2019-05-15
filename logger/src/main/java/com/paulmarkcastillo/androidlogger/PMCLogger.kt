@@ -19,6 +19,7 @@ class PMCLogger {
         private val tag = "PMCLogger"
         var enabled = true
         var printLogs = true
+        var debugMode = false
 
         // Initialize
 
@@ -32,48 +33,52 @@ class PMCLogger {
 
         fun v(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs) Log.v(tag, msg)
+                if (printLogs && !debugMode) Log.v(tag, msg)
                 addLog(Log.VERBOSE, tag, msg)
             }
         }
 
         fun d(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs) Log.d(tag, msg)
+                if (printLogs && !debugMode) Log.d(tag, msg)
                 addLog(Log.DEBUG, tag, msg)
             }
         }
 
         fun i(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs) Log.i(tag, msg)
+                if (printLogs && !debugMode) Log.i(tag, msg)
                 addLog(Log.INFO, tag, msg)
             }
         }
 
         fun w(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs) Log.w(tag, msg)
+                if (printLogs && !debugMode) Log.w(tag, msg)
                 addLog(Log.WARN, tag, msg)
             }
         }
 
         fun e(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs) Log.e(tag, msg)
+                if (printLogs && !debugMode) Log.e(tag, msg)
                 addLog(Log.ERROR, tag, msg)
             }
         }
 
         private fun addLog(priority: Int, tag: String, msg: String) {
-            val log = PMCLog(
-                priority = priority,
-                tag = tag,
-                msg = msg
-            )
-            CoroutineScope(Dispatchers.IO).launch {
-                val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                dao.addLog(log)
+            if (!debugMode) {
+                val log = PMCLog(
+                    priority = priority,
+                    tag = tag,
+                    msg = msg
+                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
+                    dao.addLog(log)
+                }
+            } else {
+                System.out.println("[${getPriorityText(priority)}] [$tag] $msg")
             }
         }
 
