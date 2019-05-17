@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         PMCLogger.init(this, printLogs = true)
-
+//changes
         val tag = "MainActivity"
 
         button.setOnClickListener {
