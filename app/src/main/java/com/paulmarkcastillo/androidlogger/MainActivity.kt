@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
             PMCLogger.w(tag, "WARN")
             PMCLogger.e(tag, "ERROR")
 
+            PMCLogger.d("tag1", "Multiple Tags")
+            PMCLogger.d("tag1, tag2, tag3", "Multiple Tags")
+            PMCLogger.d("tag1, tag3", "Multiple Tags")
+            PMCLogger.d("tag3", "Multiple Tags")
+
             PMCLogger.viewLogs(this)
         }
     }
