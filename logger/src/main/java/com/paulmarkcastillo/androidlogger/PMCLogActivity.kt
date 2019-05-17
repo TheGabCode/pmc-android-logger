@@ -114,8 +114,21 @@ class PMCLogActivity : AppCompatActivity() {
         tags.add("All")
         logs.observe(this, Observer<List<String>> {
             it.forEach { tag ->
-                tags.add(tag)
+                val arr = tag.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                if (arr.count() > 1) {
+                    for (ss in arr) {
+                        val newTag = ss.replace(",", "")
+                        if (!tags.contains(newTag)) {
+                            tags.add(newTag)
+                        }
+                    }
+                } else {
+                    if (!tags.contains(tag)) {
+                        tags.add(tag)
+                    }
+                }
             }
+
             spinnerAdapter.notifyDataSetChanged()
         })
         return tags

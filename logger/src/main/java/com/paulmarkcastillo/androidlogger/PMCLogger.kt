@@ -121,7 +121,8 @@ class PMCLogger {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                logs.postValue(dao.getLogsWithTag(tag))
+                val tags = "%$tag%"
+                logs.postValue(dao.getLogsWithTag(tags))
             }
             return logs
         }
