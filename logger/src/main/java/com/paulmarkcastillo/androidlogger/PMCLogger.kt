@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
 class PMCLogger {
@@ -119,17 +118,9 @@ class PMCLogger {
             }.invokeOnCompletion {
                 val filteredResult = ArrayList<String>()
                 result.forEach { string ->
-                    // Removes all special characters and replaces it with white space
-                    val specialCharactersRegex = "[^a-zA-Z0-9]"
-                    val regexPattern = Pattern.compile(specialCharactersRegex)
-                    val stringWithoutSpecialCharacters =
-                        regexPattern.matcher(string).replaceAll(" ")
-
                     // Separate tags in a string
-                    val splittedTags = stringWithoutSpecialCharacters.split(" ").map {
-                        tag -> tag.trim()
-                    }.filter {
-                        tag -> tag.isNotEmpty()
+                    val splittedTags = string.split(",").map { tag ->
+                        tag.trim()
                     }
 
                     splittedTags.forEach { tag ->
