@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toTopOf="@id/layout_controls">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tags_textview"
+                android:id="@+id/textview_tag"
                 android:text="TAGS:"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/tags_spnr"
+                android:id="@+id/spinner_tags"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
