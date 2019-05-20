@@ -23,7 +23,7 @@ class PMCLogActivity : AppCompatActivity() {
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private val tags = ArrayList<String>()
     private var selectedTag: String = ""
-    private  var showWithTag = false
+    private var displayLogsWithSelectedTag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +65,7 @@ class PMCLogActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                showWithTag = position > 0
+                displayLogsWithSelectedTag = position > 0
                 selectedTag = binding.spinnerTags.selectedItem.toString()
                 refresh()
             }
@@ -80,7 +80,7 @@ class PMCLogActivity : AppCompatActivity() {
     }
 
     private fun refresh() {
-        if (showWithTag) {
+        if (displayLogsWithSelectedTag) {
             displayLogsWithSelectedTag(selectedTag)
         } else {
             displayLogs()
@@ -131,7 +131,7 @@ class PMCLogActivity : AppCompatActivity() {
         val logs = PMCLogger.deleteLogs()
         logs.observe(this, Observer<List<PMCLog>> {
             adapter.submitList(it)
-            showWithTag = false
+            displayLogsWithSelectedTag = false
             spinnerAdapter.clear()
             progressDialog.dismiss()
         })
