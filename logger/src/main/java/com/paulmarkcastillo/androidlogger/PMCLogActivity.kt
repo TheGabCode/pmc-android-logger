@@ -54,7 +54,6 @@ class PMCLogActivity : AppCompatActivity() {
             } else {
                 displayLogs()
             }
-
         }
 
         binding.buttonClear.setOnClickListener {
@@ -72,7 +71,6 @@ class PMCLogActivity : AppCompatActivity() {
                 showWithTag = position > 0
                 tag = binding.tagsSpnr.selectedItem.toString()
             }
-
         }
     }
 
@@ -110,25 +108,9 @@ class PMCLogActivity : AppCompatActivity() {
 
     fun tagsList(): ArrayList<String> {
         val tags = ArrayList<String>()
-        val logs = PMCLogger.getTag()
-        tags.add("All")
-        logs.observe(this, Observer<List<String>> {
-            it.forEach { tag ->
-                val arr = tag.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (arr.count() > 1) {
-                    for (ss in arr) {
-                        val newTag = ss.replace(",", "")
-                        if (!tags.contains(newTag)) {
-                            tags.add(newTag)
-                        }
-                    }
-                } else {
-                    if (!tags.contains(tag)) {
-                        tags.add(tag)
-                    }
-                }
-            }
-
+        val result = PMCLogger.getAllTagsObservable()
+        result.observe(this, Observer<List<String>> {
+            tags.addAll(it)
             spinnerAdapter.notifyDataSetChanged()
         })
         return tags
@@ -136,7 +118,7 @@ class PMCLogActivity : AppCompatActivity() {
 
     fun displayLogsWithSelectedTag(tag: String) {
         progressDialog.show()
-        val logs = PMCLogger.getLogsWithTag(tag)
+        val logs = PMCLogger.getLogsWithTagObservable(tag)
         logs.observe(this, Observer<List<PMCLog>> {
             adapter.submitList(it)
             progressDialog.dismiss()

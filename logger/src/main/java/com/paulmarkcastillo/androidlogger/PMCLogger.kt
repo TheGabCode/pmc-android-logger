@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 class PMCLogger {
 
@@ -108,21 +110,47 @@ class PMCLogger {
             return logs
         }
 
-        fun getTag(): MutableLiveData<List<String>> {
-            val logs = MutableLiveData<List<String>>()
+        fun getAllTagsObservable(): MutableLiveData<List<String>> {
+            val tags = MutableLiveData<List<String>>()
+            val result = ArrayList<String>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                logs.postValue(dao.getTag())
+                result.addAll(dao.getTag())
+            }.invokeOnCompletion {
+                val filteredResult = ArrayList<String>()
+                result.forEach { string ->
+                    // Removes all special characters and replaces it with white space
+                    val specialCharactersRegex = "[^a-zA-Z0-9]"
+                    val regexPattern = Pattern.compile(specialCharactersRegex)
+                    val stringWithoutSpecialCharacters =
+                        regexPattern.matcher(string).replaceAll(" ")
+
+                    // Separate tags in a string
+                    val splittedTags = stringWithoutSpecialCharacters.split(" ").map {
+                        tag -> tag.trim()
+                    }.filter {
+                        tag -> tag.isNotEmpty()
+                    }
+
+                    splittedTags.forEach { tag ->
+                        if (!filteredResult.contains(tag)) {
+                            filteredResult.add(tag)
+                        }
+                    }
+                }
+                filteredResult.sortWith(String.CASE_INSENSITIVE_ORDER)
+                filteredResult.add(0, "All")
+                tags.postValue(filteredResult)
             }
-            return logs
+            return tags
         }
 
-        fun getLogsWithTag(tag: String): MutableLiveData<List<PMCLog>> {
+        fun getLogsWithTagObservable(tag: String): MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                val tags = "%$tag%"
-                logs.postValue(dao.getLogsWithTag(tags))
+                val searchKey = "%$tag%"
+                logs.postValue(dao.getLogsWithTag(searchKey))
             }
             return logs
         }

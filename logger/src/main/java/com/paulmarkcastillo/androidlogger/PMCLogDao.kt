@@ -19,6 +19,6 @@ interface PMCLogDao {
     @Query("SELECT tag FROM PMCLog GROUP BY tag")
     suspend fun getTag() : List<String>
 
-    @Query("SELECT * FROM PMCLog WHERE tag LIKE :tags")
-    suspend fun getLogsWithTag(tags: String) : List<PMCLog>
+    @Query("SELECT * FROM PMCLog WHERE tag LIKE :tag")
+    suspend fun getLogsWithTag(tag: String) : List<PMCLog>
 }
