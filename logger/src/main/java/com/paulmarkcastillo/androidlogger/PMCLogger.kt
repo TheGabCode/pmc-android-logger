@@ -115,7 +115,7 @@ class PMCLogger {
             val result = ArrayList<String>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                result.addAll(dao.getTag())
+                result.addAll(dao.getAllTags())
             }.invokeOnCompletion {
                 val filteredResult = ArrayList<String>()
                 result.forEach { string ->
