@@ -67,11 +67,7 @@ class PMCLogActivity : AppCompatActivity() {
             ) {
                 showWithTag = position > 0
                 selectedTag = binding.spinnerTags.selectedItem.toString()
-                if (showWithTag) {
-                    displayLogsWithSelectedTag(selectedTag)
-                } else {
-                    displayLogs()
-                }
+                refresh()
             }
         }
 
