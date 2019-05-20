@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
             PMCLogger.d("tag3.,.,tag4,tag3", "Multiple Tags")
             PMCLogger.d("tag5.,.,tag6,tag7", "Multiple Tags")
 
+            PMCLogger.d("slash1/slash2/slash3", "Slashed Tags")
+
             PMCLogger.viewLogs(this)
         }
     }
