@@ -90,11 +90,12 @@ class PMCLogger {
             activity.startActivity(intent)
         }
 
-        fun getLogsObservable(): MutableLiveData<List<PMCLog>> {
+        fun getLogsObservable(priority: String): MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                logs.postValue(dao.getAllLogs())
+                val valueOfPriority = getPriorityValue(priority)
+                logs.postValue(dao.getAllFilteredLogs(valueOfPriority))
             }
             return logs
         }
@@ -136,12 +137,13 @@ class PMCLogger {
             return tags
         }
 
-        fun getLogsWithTagObservable(tag: String): MutableLiveData<List<PMCLog>> {
+        fun getFilteredLogs(priority: String, tag: String) : MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                val searchKey = "%$tag%"
-                logs.postValue(dao.getLogsWithTag(searchKey))
+                val valueOfPriority = getPriorityValue(priority)
+                val valueOfTag = "%$tag%"
+                logs.postValue(dao.getAllFilteredPriorityAndTag(valueOfPriority, valueOfTag))
             }
             return logs
         }
@@ -156,6 +158,17 @@ class PMCLogger {
                 Log.WARN -> "Warn"
                 Log.ERROR -> "Error"
                 else -> "Unknown"
+            }
+        }
+
+        private fun getPriorityValue(priority: String) : Int {
+            return when (priority) {
+                "Verbose" -> Log.VERBOSE
+                "Debug" -> Log.DEBUG
+                "Info" -> Log.INFO
+                "Warn" -> Log.WARN
+                "Error" -> Log.ERROR
+                else -> 0
             }
         }
     }

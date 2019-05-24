@@ -20,9 +20,12 @@ class PMCLogActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPmclogBinding
     private lateinit var adapter: PMCLogAdapter
     private lateinit var progressDialog: AlertDialog
-    private lateinit var spinnerAdapter: ArrayAdapter<String>
-    private val tags = ArrayList<String>()
+    private lateinit var spinnerTagAdapter: ArrayAdapter<String>
+    private lateinit var spinnerPriorityAdapter: ArrayAdapter<String>
+    private var tags = ArrayList<String>()
+    private val retainTag = ArrayList<String>()
     private var selectedTag: String = ""
+    private var selectedPriority: String = ""
     private var displayLogsWithSelectedTag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,11 +52,12 @@ class PMCLogActivity : AppCompatActivity() {
         binding.recyclerviewLogs.adapter = adapter
 
         binding.buttonRefresh.setOnClickListener {
-            refresh()
+            refreshFilteredLogs()
         }
 
         binding.buttonClear.setOnClickListener {
             deleteLogs()
+            refreshFilteredLogs()
         }
 
         binding.spinnerTags.onItemSelectedListener = object : OnItemSelectedListener {
@@ -67,40 +71,74 @@ class PMCLogActivity : AppCompatActivity() {
             ) {
                 displayLogsWithSelectedTag = position > 0
                 selectedTag = binding.spinnerTags.selectedItem.toString()
-                refresh()
             }
         }
 
-        setupSpinnerAdapter()
+        binding.spinnerPriority.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedPriority = binding.spinnerPriority.selectedItem.toString()
+            }
+        }
+
+        setupSpinnerTagAdapter()
+        setupSpinnerPriorityAdapter()
     }
 
     override fun onResume() {
         super.onResume()
-        refresh()
+        refreshFilteredLogs()
     }
 
-    private fun refresh() {
+    private fun refreshFilteredLogs() {
         if (displayLogsWithSelectedTag) {
-            displayLogsWithSelectedTag(selectedTag)
-        } else {
-            displayLogs()
+            displayFilteredPriorityAndTags(selectedPriority, selectedTag)
+        }else{
+            displayLogs(selectedPriority)
         }
     }
 
-    private fun setupSpinnerAdapter() {
-        spinnerAdapter = ArrayAdapter(
+    private fun setupSpinnerTagAdapter() {
+        spinnerTagAdapter = ArrayAdapter(
             this,
             R.layout.spinner_item_layout,
             tags
         )
-        binding.spinnerTags.adapter = spinnerAdapter
+        binding.spinnerTags.adapter = spinnerTagAdapter
     }
 
-    private fun displayLogs() {
+    private fun setupSpinnerPriorityAdapter(){
+        spinnerPriorityAdapter = ArrayAdapter(
+            this,
+            R.layout.spinner_item_layout,
+            resources.getStringArray(R.array.minimum_priority_array)
+        )
+        binding.spinnerPriority.adapter = spinnerPriorityAdapter
+    }
+
+    private fun displayLogs(priority: String) {
         progressDialog.show()
-        val logs = PMCLogger.getLogsObservable()
+        val logs = PMCLogger.getLogsObservable(priority)
         logs.observe(this, Observer<List<PMCLog>> {
             if (it.isNotEmpty()) {
+                displayTags()
+            }
+            adapter.submitList(it)
+            progressDialog.dismiss()
+        })
+    }
+
+    private fun displayFilteredPriorityAndTags(priority: String, tag: String){
+        progressDialog.show()
+        val logs = PMCLogger.getFilteredLogs(priority, tag)
+        logs.observe(this, Observer<List<PMCLog>>{
+            if (it.isEmpty()) {
                 displayTags()
             }
             adapter.submitList(it)
@@ -113,16 +151,7 @@ class PMCLogActivity : AppCompatActivity() {
         result.observe(this, Observer<List<String>> {
             tags.clear()
             tags.addAll(it)
-            spinnerAdapter.notifyDataSetChanged()
-        })
-    }
-
-    private fun displayLogsWithSelectedTag(tag: String) {
-        progressDialog.show()
-        val logs = PMCLogger.getLogsWithTagObservable(tag)
-        logs.observe(this, Observer<List<PMCLog>> {
-            adapter.submitList(it)
-            progressDialog.dismiss()
+            spinnerTagAdapter.notifyDataSetChanged()
         })
     }
 
@@ -132,8 +161,17 @@ class PMCLogActivity : AppCompatActivity() {
         logs.observe(this, Observer<List<PMCLog>> {
             adapter.submitList(it)
             displayLogsWithSelectedTag = false
-            spinnerAdapter.clear()
+            retainTag.apply {
+                addAll(tags.filterIndexed { index, s ->
+                    index == 0
+                })
+            }
+            tags.clear()
+            tags.addAll(retainTag)
+            spinnerTagAdapter.notifyDataSetChanged()
             progressDialog.dismiss()
+
+            setupSpinnerPriorityAdapter()
         })
     }
 }

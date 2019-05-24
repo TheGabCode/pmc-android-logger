@@ -10,6 +10,36 @@
         android:padding="16dp">
 
         <LinearLayout
+                android:id="@+id/layout_filter_priority"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textview_minimum_priority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MINIMUM PRIORITY:"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinner_priority"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layout_filter_control"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -18,7 +48,7 @@
             app:layout_constraintBottom_toTopOf="@id/layout_controls"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/layout_filter_priority">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_tag"
