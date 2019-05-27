@@ -90,22 +90,12 @@ class PMCLogger {
             activity.startActivity(intent)
         }
 
-        fun getLogsObservable(priority: String): MutableLiveData<List<PMCLog>> {
-            val logs = MutableLiveData<List<PMCLog>>()
-            CoroutineScope(Dispatchers.IO).launch {
-                val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                val valueOfPriority = getPriorityValue(priority)
-                logs.postValue(dao.getAllFilteredLogs(valueOfPriority))
-            }
-            return logs
-        }
-
         fun deleteLogs(): MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
                 dao.deleteAllLogs()
-                logs.postValue(dao.getAllLogs())
+                logs.postValue(emptyList())
             }
             return logs
         }
@@ -142,8 +132,8 @@ class PMCLogger {
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
                 val valueOfPriority = getPriorityValue(priority)
-                val valueOfTag = "%$tag%"
-                logs.postValue(dao.getAllFilteredPriorityAndTag(valueOfPriority, valueOfTag))
+                var valueOfTag = "%$tag%"
+                logs.postValue(dao.getAllFilteredLogs(valueOfPriority, valueOfTag))
             }
             return logs
         }

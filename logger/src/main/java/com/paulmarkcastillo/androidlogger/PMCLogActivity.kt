@@ -57,7 +57,6 @@ class PMCLogActivity : AppCompatActivity() {
 
         binding.buttonClear.setOnClickListener {
             deleteLogs()
-            refreshFilteredLogs()
         }
 
         binding.spinnerTags.onItemSelectedListener = object : OnItemSelectedListener {
@@ -98,9 +97,9 @@ class PMCLogActivity : AppCompatActivity() {
 
     private fun refreshFilteredLogs() {
         if (displayLogsWithSelectedTag) {
-            displayFilteredPriorityAndTags(selectedPriority, selectedTag)
+            displayFilteredLogs(selectedPriority, selectedTag)
         }else{
-            displayLogs(selectedPriority)
+            displayFilteredLogs(selectedPriority, "")
         }
     }
 
@@ -122,23 +121,11 @@ class PMCLogActivity : AppCompatActivity() {
         binding.spinnerPriority.adapter = spinnerPriorityAdapter
     }
 
-    private fun displayLogs(priority: String) {
-        progressDialog.show()
-        val logs = PMCLogger.getLogsObservable(priority)
-        logs.observe(this, Observer<List<PMCLog>> {
-            if (it.isNotEmpty()) {
-                displayTags()
-            }
-            adapter.submitList(it)
-            progressDialog.dismiss()
-        })
-    }
-
-    private fun displayFilteredPriorityAndTags(priority: String, tag: String){
+    private fun displayFilteredLogs(priority: String, tag: String){
         progressDialog.show()
         val logs = PMCLogger.getFilteredLogs(priority, tag)
         logs.observe(this, Observer<List<PMCLog>>{
-            if (it.isEmpty()) {
+            if (it.isNotEmpty()) {
                 displayTags()
             }
             adapter.submitList(it)
