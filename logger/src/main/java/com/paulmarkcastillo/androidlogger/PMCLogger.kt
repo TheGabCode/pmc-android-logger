@@ -127,13 +127,11 @@ class PMCLogger {
             return tags
         }
 
-        fun getFilteredLogs(priority: String, tag: String) : MutableLiveData<List<PMCLog>> {
+        fun getFilteredLogs(priority: Int, tag: String) : MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                val valueOfPriority = getPriorityValue(priority)
-                var valueOfTag = "%$tag%"
-                logs.postValue(dao.getAllFilteredLogs(valueOfPriority, valueOfTag))
+                logs.postValue(dao.getAllFilteredLogs(priority, "%$tag%"))
             }
             return logs
         }
@@ -151,7 +149,7 @@ class PMCLogger {
             }
         }
 
-        private fun getPriorityValue(priority: String) : Int {
+        fun getPriorityValue(priority: String) : Int {
             return when (priority) {
                 "Verbose" -> Log.VERBOSE
                 "Debug" -> Log.DEBUG
