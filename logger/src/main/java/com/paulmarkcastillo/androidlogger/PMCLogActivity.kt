@@ -15,7 +15,7 @@ import dmax.dialog.SpotsDialog
 class PMCLogActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPmclogBinding
-    private lateinit var adapter: PMCLogAdapter
+    private lateinit var logAdapter: PMCLogAdapter
     private lateinit var progressDialog: AlertDialog
     private lateinit var tagAdapter: ArrayAdapter<String>
     private lateinit var priorityAdapter: ArrayAdapter<String>
@@ -41,8 +41,8 @@ class PMCLogActivity : AppCompatActivity() {
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
 
-        adapter = PMCLogAdapter()
-        binding.recyclerviewLogs.adapter = adapter
+        logAdapter = PMCLogAdapter()
+        binding.recyclerviewLogs.adapter = logAdapter
 
         binding.buttonRefresh.setOnClickListener {
             refreshFilteredLogs()
@@ -98,7 +98,7 @@ class PMCLogActivity : AppCompatActivity() {
         val logs = PMCLogger.getFilteredLogs(PMCLogger.getPriorityValue(priority), tag)
         logs.observe(this, Observer<List<PMCLog>>{
             displayTags()
-            adapter.submitList(it)
+            logAdapter.submitList(it)
             progressDialog.dismiss()
         })
     }
@@ -116,7 +116,7 @@ class PMCLogActivity : AppCompatActivity() {
         progressDialog.show()
         val logs = PMCLogger.deleteLogs()
         logs.observe(this, Observer<List<PMCLog>> {
-            adapter.submitList(it)
+            logAdapter.submitList(it)
             val retainTag = ArrayList<String>().apply {
                 addAll(tags.filterIndexed { index, _ ->
                     index == 0
