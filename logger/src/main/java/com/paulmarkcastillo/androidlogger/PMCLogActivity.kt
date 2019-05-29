@@ -15,11 +15,12 @@ import dmax.dialog.SpotsDialog
 class PMCLogActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPmclogBinding
-    private lateinit var logAdapter: PMCLogAdapter
-    private lateinit var tagAdapter: ArrayAdapter<String>
-    private lateinit var priorityAdapter: ArrayAdapter<String>
-    private lateinit var tags: ArrayList<String>
     private lateinit var progressDialog: AlertDialog
+    private var tags =  ArrayList<String>()
+
+    private lateinit var adapterLogs: PMCLogAdapter
+    private lateinit var adapterTags: ArrayAdapter<String>
+    private lateinit var adapterPriorities: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +29,6 @@ class PMCLogActivity : AppCompatActivity() {
 
         progressDialog = SpotsDialog.Builder().setContext(this).build()
         progressDialog.setCancelable(false)
-
-        tags = ArrayList()
 
         val layoutManager = LinearLayoutManager(
             this,
@@ -43,8 +42,8 @@ class PMCLogActivity : AppCompatActivity() {
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
 
-        logAdapter = PMCLogAdapter()
-        binding.recyclerviewLogs.adapter = logAdapter
+        adapterLogs = PMCLogAdapter()
+        binding.recyclerviewLogs.adapter = adapterLogs
 
         binding.buttonRefresh.setOnClickListener {
             refreshLogs()
@@ -54,8 +53,19 @@ class PMCLogActivity : AppCompatActivity() {
             deleteLogs()
         }
 
-        setupSpinnerTagAdapter()
-        setupSpinnerPriorityAdapter()
+        adapterTags = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            tags
+        )
+        binding.spinnerTags.adapter = adapterTags
+
+        adapterPriorities = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.priorities)
+        )
+        binding.spinnerPriority.adapter = adapterPriorities
     }
 
     override fun onResume() {
@@ -73,58 +83,28 @@ class PMCLogActivity : AppCompatActivity() {
         )
     }
 
-    private fun setupSpinnerTagAdapter() {
-        tagAdapter = ArrayAdapter(
-            this,
-            R.layout.spinner_item_layout,
-            tags
-        )
-        binding.spinnerTags.adapter = tagAdapter
-    }
-
-    private fun setupSpinnerPriorityAdapter() {
-        priorityAdapter = ArrayAdapter(
-            this,
-            R.layout.spinner_item_layout,
-            resources.getStringArray(R.array.minimum_priority_array)
-        )
-        binding.spinnerPriority.adapter = priorityAdapter
-    }
-
     private fun displayLogs(priority: String, tag: String) {
         progressDialog.show()
-        val logs = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag)
-        logs.observe(this, Observer<List<PMCLog>> {
-            displayTags()
-            logAdapter.submitList(it)
-            progressDialog.dismiss()
-        })
-    }
+        val logsObservable = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag)
+        logsObservable.observe(this, Observer<List<PMCLog>> { log ->
+            adapterLogs.submitList(log)
 
-    private fun displayTags() {
-        val result = PMCLogger.getAllTagsObservable()
-        result.observe(this, Observer<List<String>> {
-            tags.clear()
-            tags.addAll(it)
-            tagAdapter.notifyDataSetChanged()
+            val tagsObservable = PMCLogger.getAllTagsObservable()
+            tagsObservable.observe(this, Observer<List<String>> { tags ->
+                this.tags.clear()
+                this.tags.addAll(tags)
+                adapterTags.notifyDataSetChanged()
+                progressDialog.dismiss()
+            })
         })
     }
 
     private fun deleteLogs() {
         progressDialog.show()
-        val logs = PMCLogger.deleteLogs()
-        logs.observe(this, Observer<List<PMCLog>> {
-            logAdapter.submitList(it)
-            val retainTag = ArrayList<String>().apply {
-                addAll(tags.filterIndexed { index, _ ->
-                    index == 0
-                })
-            }
-            tags.clear()
-            tags.addAll(retainTag)
-            tagAdapter.notifyDataSetChanged()
-            progressDialog.dismiss()
+        val logsObservable = PMCLogger.deleteLogs()
+        logsObservable.observe(this, Observer<List<PMCLog>> {
             binding.spinnerPriority.setSelection(0)
+            refreshLogs()
         })
     }
 }

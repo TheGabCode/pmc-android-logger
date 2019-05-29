@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="minimum_priority_array">
+    <string-array name="priorities">
         <item>Verbose</item>
         <item>Debug</item>
         <item>Info</item>

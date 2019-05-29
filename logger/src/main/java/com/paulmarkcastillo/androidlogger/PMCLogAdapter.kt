@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.paulmarkcastillo.androidlogger.databinding.ListItemPmclogBinding
-import java.util.*
+import java.util.Date
 
 class PMCLogAdapter : ListAdapter<PMCLog, PMCLogAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<PMCLog>() {

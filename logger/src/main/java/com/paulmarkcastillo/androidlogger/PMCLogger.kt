@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 
 class PMCLogger {
 
@@ -17,7 +16,7 @@ class PMCLogger {
 
         @SuppressLint("StaticFieldLeak")
         private lateinit var applicationContext: Context
-        private val tag = "PMCLogger"
+        private const val tag = "PMCLogger"
         var enabled = true
         var printLogs = true
         var debugMode = false
@@ -127,7 +126,7 @@ class PMCLogger {
             return tags
         }
 
-        fun getLogs(priority: Int, tag: String) : MutableLiveData<List<PMCLog>> {
+        fun getLogs(priority: Int, tag: String): MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
@@ -149,7 +148,7 @@ class PMCLogger {
             }
         }
 
-        fun getPriorityValue(priority: String) : Int {
+        fun getPriorityValue(priority: String): Int {
             return when (priority) {
                 "Verbose" -> Log.VERBOSE
                 "Debug" -> Log.DEBUG
