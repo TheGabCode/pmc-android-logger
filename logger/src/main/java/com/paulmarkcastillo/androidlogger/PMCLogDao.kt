@@ -17,5 +17,5 @@ interface PMCLogDao {
     suspend fun deleteAllLogs()
 
     @Query("SELECT * FROM PMCLog WHERE priority >= :priority AND tag LIKE :tag ORDER BY timestamp ASC")
-    suspend fun getAllFilteredLogs(priority: Int, tag: String) : List<PMCLog>
+    suspend fun getAllLogs(priority: Int, tag: String) : List<PMCLog>
 }

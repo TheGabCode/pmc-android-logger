@@ -127,11 +127,11 @@ class PMCLogger {
             return tags
         }
 
-        fun getFilteredLogs(priority: Int, tag: String) : MutableLiveData<List<PMCLog>> {
+        fun getLogs(priority: Int, tag: String) : MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                logs.postValue(dao.getAllFilteredLogs(priority, "%$tag%"))
+                logs.postValue(dao.getAllLogs(priority, "%$tag%"))
             }
             return logs
         }

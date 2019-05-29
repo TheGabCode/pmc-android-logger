@@ -16,10 +16,10 @@ class PMCLogActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPmclogBinding
     private lateinit var logAdapter: PMCLogAdapter
-    private lateinit var progressDialog: AlertDialog
     private lateinit var tagAdapter: ArrayAdapter<String>
     private lateinit var priorityAdapter: ArrayAdapter<String>
-    private var tags = ArrayList<String>()
+    private lateinit var tags: ArrayList<String>
+    private lateinit var progressDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +28,8 @@ class PMCLogActivity : AppCompatActivity() {
 
         progressDialog = SpotsDialog.Builder().setContext(this).build()
         progressDialog.setCancelable(false)
+
+        tags = ArrayList()
 
         val layoutManager = LinearLayoutManager(
             this,
@@ -45,7 +47,7 @@ class PMCLogActivity : AppCompatActivity() {
         binding.recyclerviewLogs.adapter = logAdapter
 
         binding.buttonRefresh.setOnClickListener {
-            refreshFilteredLogs()
+            refreshLogs()
         }
 
         binding.buttonClear.setOnClickListener {
@@ -58,21 +60,17 @@ class PMCLogActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshFilteredLogs()
+        refreshLogs()
     }
 
-    private fun refreshFilteredLogs() {
-        if (binding.spinnerTags.selectedItemPosition > 0) {
-            displayFilteredLogs(
-                binding.spinnerPriority.selectedItem.toString(),
+    private fun refreshLogs() {
+        displayLogs(
+            binding.spinnerPriority.selectedItem.toString(), if (binding.spinnerTags.selectedItemPosition > 0) {
                 binding.spinnerTags.selectedItem.toString()
-            )
-        }else{
-            displayFilteredLogs(
-                binding.spinnerPriority.selectedItem.toString(),
+            } else {
                 ""
-            )
-        }
+            }
+        )
     }
 
     private fun setupSpinnerTagAdapter() {
@@ -84,7 +82,7 @@ class PMCLogActivity : AppCompatActivity() {
         binding.spinnerTags.adapter = tagAdapter
     }
 
-    private fun setupSpinnerPriorityAdapter(){
+    private fun setupSpinnerPriorityAdapter() {
         priorityAdapter = ArrayAdapter(
             this,
             R.layout.spinner_item_layout,
@@ -93,10 +91,10 @@ class PMCLogActivity : AppCompatActivity() {
         binding.spinnerPriority.adapter = priorityAdapter
     }
 
-    private fun displayFilteredLogs(priority: String, tag: String){
+    private fun displayLogs(priority: String, tag: String) {
         progressDialog.show()
-        val logs = PMCLogger.getFilteredLogs(PMCLogger.getPriorityValue(priority), tag)
-        logs.observe(this, Observer<List<PMCLog>>{
+        val logs = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag)
+        logs.observe(this, Observer<List<PMCLog>> {
             displayTags()
             logAdapter.submitList(it)
             progressDialog.dismiss()
@@ -126,8 +124,7 @@ class PMCLogActivity : AppCompatActivity() {
             tags.addAll(retainTag)
             tagAdapter.notifyDataSetChanged()
             progressDialog.dismiss()
-
-            setupSpinnerPriorityAdapter()
+            binding.spinnerPriority.setSelection(0)
         })
     }
 }
