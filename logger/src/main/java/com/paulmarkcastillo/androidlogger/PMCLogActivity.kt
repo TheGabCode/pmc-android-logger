@@ -2,6 +2,8 @@ package com.paulmarkcastillo.androidlogger
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -16,7 +18,7 @@ class PMCLogActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPmclogBinding
     private lateinit var progressDialog: AlertDialog
-    private var tags =  ArrayList<String>()
+    private var tags = ArrayList<String>()
 
     private lateinit var adapterLogs: PMCLogAdapter
     private lateinit var adapterTags: ArrayAdapter<String>
@@ -49,10 +51,6 @@ class PMCLogActivity : AppCompatActivity() {
             refreshLogs()
         }
 
-        binding.buttonClear.setOnClickListener {
-            deleteLogs()
-        }
-
         adapterTags = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
@@ -68,9 +66,24 @@ class PMCLogActivity : AppCompatActivity() {
         binding.spinnerPriority.adapter = adapterPriorities
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
     override fun onResume() {
         super.onResume()
         refreshLogs()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_clear -> {
+                deleteLogs()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     private fun refreshLogs() {

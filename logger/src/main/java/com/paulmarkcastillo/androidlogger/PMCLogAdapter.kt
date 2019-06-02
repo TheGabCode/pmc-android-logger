@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.paulmarkcastillo.androidlogger.databinding.ListItemPmclogBinding
-import java.util.Date
 
 class PMCLogAdapter : ListAdapter<PMCLog, PMCLogAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<PMCLog>() {
@@ -41,7 +40,7 @@ class PMCLogAdapter : ListAdapter<PMCLog, PMCLogAdapter.ViewHolder>(
         @SuppressLint("SetTextI18n")
         fun bind(log: PMCLog) {
             binding.textviewId.text = "#${log.id}"
-            binding.textviewTimestamp.text = Date(log.timestamp).toString()
+            binding.textviewTimestamp.text = log.timestamp
             binding.textviewTags.text = log.tag
             binding.textviewPriority.text = PMCLogger.getPriorityText(log.priority)
             binding.textviewMessage.text = log.msg

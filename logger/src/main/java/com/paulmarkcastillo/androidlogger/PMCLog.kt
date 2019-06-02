@@ -2,6 +2,7 @@ package com.paulmarkcastillo.androidlogger
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity
 data class PMCLog(
@@ -12,5 +13,5 @@ data class PMCLog(
     @PrimaryKey(autoGenerate = true)
     var id = 0
 
-    var timestamp = System.currentTimeMillis()
+    var timestamp = Date(System.currentTimeMillis()).toString()
 }
