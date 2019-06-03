@@ -32,6 +32,7 @@ class PMCLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pmclog)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         progressDialog = SpotsDialog.Builder().setContext(this).build()
         progressDialog.setCancelable(false)
