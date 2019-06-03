@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-group="com.github.paulmarkcastillo"
+group = "com.github.paulmarkcastillo"
 
 android {
     compileSdkVersion 28
@@ -38,13 +38,22 @@ dependencies {
     kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01'
 
     // Google Room
-    implementation 'androidx.room:room-runtime:2.1.0-beta01'
-    kapt 'androidx.room:room-compiler:2.1.0-beta01'
-    implementation 'androidx.room:room-ktx:2.1.0-beta01'
+    implementation 'androidx.room:room-runtime:2.1.0-rc01'
+    kapt 'androidx.room:room-compiler:2.1.0-rc01'
+    implementation 'androidx.room:room-ktx:2.1.0-rc01'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     // Spots Dialog
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
+    // Assent
+    implementation 'com.afollestad:assent:2.3.0'
+
+    // Storage Chooser
+    implementation 'com.github.codekidX:storage-chooser:2.0.4.4'
+
+    // OpenCSV
+    implementation 'com.opencsv:opencsv:4.6'
 }
 
 repositories {

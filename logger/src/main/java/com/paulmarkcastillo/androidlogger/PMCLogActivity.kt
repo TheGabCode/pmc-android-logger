@@ -11,8 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.assent.Permission
+import com.afollestad.assent.runWithPermissions
+import com.codekidlabs.storagechooser.StorageChooser
 import com.paulmarkcastillo.androidlogger.databinding.ActivityPmclogBinding
 import dmax.dialog.SpotsDialog
+import java.io.File
 
 class PMCLogActivity : AppCompatActivity() {
 
@@ -82,6 +86,14 @@ class PMCLogActivity : AppCompatActivity() {
                 deleteLogs()
                 true
             }
+            R.id.menu_export -> {
+                exportLogs()
+                true
+            }
+            R.id.menu_exit -> {
+                finish()
+                true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -119,5 +131,46 @@ class PMCLogActivity : AppCompatActivity() {
             binding.spinnerPriority.setSelection(0)
             refreshLogs()
         })
+    }
+
+    private fun exportLogs() {
+        runWithPermissions(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE) {
+
+            val chooser = StorageChooser.Builder()
+                .withActivity(this)
+                .withFragmentManager(fragmentManager)
+                .withMemoryBar(true)
+                .allowCustomPath(true)
+                .setType(StorageChooser.DIRECTORY_CHOOSER)
+                .build()
+
+            chooser.setOnSelectListener { path ->
+                PMCLogger.e("PMCLogActivity", "Selected Path: $path")
+                val file = File(path + "/" + System.currentTimeMillis() + ".csv")
+                progressDialog.show()
+                val logsObservable = PMCLogger.exportCSV(file)
+                logsObservable.observe(this, Observer<String> { status ->
+                    progressDialog.dismiss()
+                    if (status.isEmpty()) {
+                        AlertDialog.Builder(this@PMCLogActivity)
+                            .setTitle("Success")
+                            .setMessage("Successfully Saved at: \n${file.absolutePath}")
+                            .setPositiveButton(android.R.string.yes) { _, _ -> }
+                            .show()
+                    } else {
+                        AlertDialog.Builder(this@PMCLogActivity)
+                            .setTitle("Failed")
+                            .setMessage(
+                                "Failed to Save at: " +
+                                        file.absolutePath + "\n" +
+                                        "Message: " + status
+                            )
+                            .setPositiveButton(android.R.string.yes) { _, _ -> }
+                            .show()
+                    }
+                })
+            }
+            chooser.show()
+        }
     }
 }

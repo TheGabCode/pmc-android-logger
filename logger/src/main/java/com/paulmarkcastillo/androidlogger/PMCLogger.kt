@@ -6,9 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.opencsv.CSVWriter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileWriter
 
 class PMCLogger {
 
@@ -134,6 +137,51 @@ class PMCLogger {
             }
             return logs
         }
+
+        // Export CSV
+
+        fun exportCSV(file: File): MutableLiveData<String> {
+            val statusObservable = MutableLiveData<String>()
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val fileWriter = FileWriter(file)
+                    val csvWriter = CSVWriter(fileWriter)
+
+                    csvWriter.writeNext(
+                        arrayOf(
+                            "id",
+                            "timestamp",
+                            "priority",
+                            "tag",
+                            "message"
+                        )
+                    )
+
+                    val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
+                    val logs = dao.getAllLogs(Log.VERBOSE, "%%")
+                    logs.forEach {
+                        csvWriter.writeNext(
+                            arrayOf(
+                                it.id.toString(),
+                                it.timestamp,
+                                it.priority.toString(),
+                                it.tag,
+                                it.msg
+                            )
+                        )
+                    }
+
+                    csvWriter.close()
+                    statusObservable.postValue("")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    statusObservable.postValue(e.message)
+                }
+            }
+
+            return statusObservable
+        }
+
 
         // Utilities
 

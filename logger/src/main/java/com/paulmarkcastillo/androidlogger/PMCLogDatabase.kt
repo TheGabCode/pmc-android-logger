@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [PMCLog::class], version = 1)
+@Database(entities = [PMCLog::class], version = 2)
 abstract class PMCLogDatabase : RoomDatabase() {
 
     abstract fun logDao(): PMCLogDao
@@ -24,7 +24,7 @@ abstract class PMCLogDatabase : RoomDatabase() {
                     context.applicationContext,
                     PMCLogDatabase::class.java,
                     "pmclog_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }
