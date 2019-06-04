@@ -59,7 +59,7 @@
             android:orientation="horizontal"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            app:layout_constraintBottom_toTopOf="@id/layout_controls"
+            app:layout_constraintBottom_toTopOf="@id/layout_filter_message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_filter_priority">
@@ -85,6 +85,35 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_filter_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@id/layout_controls"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_filter_control">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MESSAGE:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edittext_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layout_controls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,7 +123,7 @@
             android:paddingEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_filter_control">
+            app:layout_constraintTop_toBottomOf="@id/layout_filter_message">
 
             <Button
                 android:id="@+id/button_refresh"
