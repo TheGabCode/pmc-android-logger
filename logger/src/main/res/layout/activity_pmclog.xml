@@ -100,15 +100,16 @@
                 android:id="@+id/textview_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MESSAGE: "
+                android:text="MESSAGE:"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edittext_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </LinearLayout>
 
