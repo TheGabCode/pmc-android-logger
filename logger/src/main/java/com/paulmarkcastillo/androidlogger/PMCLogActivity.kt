@@ -105,13 +105,13 @@ class PMCLogActivity : AppCompatActivity() {
                 binding.spinnerTags.selectedItem.toString()
             } else {
                 ""
-            }
+            }, binding.edittextMessage.text.toString()
         )
     }
 
-    private fun displayLogs(priority: String, tag: String) {
+    private fun displayLogs(priority: String, tag: String, msg: String) {
         progressDialog.show()
-        val logsObservable = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag)
+        val logsObservable = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag, msg)
         logsObservable.observe(this, Observer<List<PMCLog>> { log ->
             adapterLogs.submitList(log)
 
