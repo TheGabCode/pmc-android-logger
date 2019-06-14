@@ -85,7 +85,7 @@ class PMCLogActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_toggle -> {
-                toggleEnable()
+                toggleEnabled()
                 true
             }
             R.id.menu_clear -> {
@@ -180,7 +180,7 @@ class PMCLogActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleEnable() {
+    private fun toggleEnabled() {
         AlertDialog.Builder(this@PMCLogActivity)
             .setTitle("Toggle Enabled")
             .setMessage("Enable logger?")
