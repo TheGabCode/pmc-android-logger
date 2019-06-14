@@ -182,9 +182,6 @@ class PMCLogger {
             return statusObservable
         }
 
-        fun toggleEnable() {
-            enabled = !enabled
-        }
         // Utilities
 
         fun getPriorityText(priority: Int): String {
