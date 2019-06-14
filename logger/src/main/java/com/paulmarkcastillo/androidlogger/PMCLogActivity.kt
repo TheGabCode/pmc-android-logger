@@ -131,12 +131,19 @@ class PMCLogActivity : AppCompatActivity() {
     }
 
     private fun deleteLogs() {
-        progressDialog.show()
-        val logsObservable = PMCLogger.deleteLogs()
-        logsObservable.observe(this, Observer<List<PMCLog>> {
-            binding.spinnerPriority.setSelection(0)
-            refreshLogs()
-        })
+        AlertDialog.Builder(this@PMCLogActivity)
+            .setTitle("Delete Logs")
+            .setMessage("Are you sure you want to delete logs?")
+            .setPositiveButton("Yes") { _, _ ->
+                progressDialog.show()
+                val logsObservable = PMCLogger.deleteLogs()
+                logsObservable.observe(this, Observer<List<PMCLog>> {
+                    binding.spinnerPriority.setSelection(0)
+                    refreshLogs()
+                })
+            }
+            .setNegativeButton("No") { _, _ -> }
+            .show()
     }
 
     private fun exportLogs() {
