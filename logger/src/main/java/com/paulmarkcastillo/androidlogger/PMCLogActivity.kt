@@ -132,8 +132,8 @@ class PMCLogActivity : AppCompatActivity() {
 
     private fun deleteLogs() {
         AlertDialog.Builder(this@PMCLogActivity)
-            .setTitle("Delete Logs")
-            .setMessage("Are you sure you want to delete logs?")
+            .setTitle("Clear Logs")
+            .setMessage("Are you sure you want to clear all logs?")
             .setPositiveButton("Yes") { _, _ ->
                 progressDialog.show()
                 val logsObservable = PMCLogger.deleteLogs()
