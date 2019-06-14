@@ -32,6 +32,7 @@ class PMCLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pmclog)
+        binding.toolbar.title = setToolbarTitle(PMCLogger.enabled)
         setSupportActionBar(findViewById(R.id.toolbar))
 
         progressDialog = SpotsDialog.Builder().setContext(this).build()
@@ -83,6 +84,10 @@ class PMCLogActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_toggle -> {
+                toggleEnabled()
+                true
+            }
             R.id.menu_clear -> {
                 deleteLogs()
                 true
@@ -173,5 +178,24 @@ class PMCLogActivity : AppCompatActivity() {
             }
             chooser.show()
         }
+    }
+
+    private fun toggleEnabled() {
+        AlertDialog.Builder(this@PMCLogActivity)
+            .setTitle("Toggle Enabled")
+            .setMessage("Enable logger?")
+            .setPositiveButton("Yes") { _, _ ->
+                PMCLogger.enabled = true
+                binding.toolbar.title = setToolbarTitle(true)
+            }
+            .setNegativeButton("No") { _, _ ->
+                PMCLogger.enabled = false
+                binding.toolbar.title = setToolbarTitle(false)
+            }
+            .show()
+    }
+
+    private fun setToolbarTitle(enabled: Boolean): String {
+        return if (enabled) "PMC Logger (Enabled)" else "PMC Logger (Disabled)"
     }
 }

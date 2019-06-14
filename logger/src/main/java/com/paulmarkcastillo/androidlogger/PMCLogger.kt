@@ -182,7 +182,6 @@ class PMCLogger {
             return statusObservable
         }
 
-
         // Utilities
 
         fun getPriorityText(priority: Int): String {
