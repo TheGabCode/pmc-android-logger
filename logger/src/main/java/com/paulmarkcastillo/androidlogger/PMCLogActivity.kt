@@ -184,11 +184,11 @@ class PMCLogActivity : AppCompatActivity() {
         AlertDialog.Builder(this@PMCLogActivity)
             .setTitle("Toggle Enable")
             .setMessage("Toggle logger?")
-            .setPositiveButton(android.R.string.yes) { _, _ ->
+            .setPositiveButton("Yes") { _, _ ->
                 PMCLogger.toggleEnable()
                 binding.toolbar.title = setToolbarTitle(PMCLogger.enabled)
             }
-            .setNegativeButton(android.R.string.no) { _, _ -> }
+            .setNegativeButton("No") { _, _ -> }
             .show()
     }
 
