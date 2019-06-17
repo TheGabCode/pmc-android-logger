@@ -70,11 +70,13 @@ class PMCLogger {
         }
 
         private fun addLog(priority: Int, tag: String, msg: String) {
+            val formattedMsg = msg.replace(",", " ")
+
             if (!debugMode) {
                 val log = PMCLog(
                     priority = priority,
                     tag = tag,
-                    msg = msg
+                    msg = formattedMsg
                 )
                 CoroutineScope(Dispatchers.IO).launch {
                     val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
