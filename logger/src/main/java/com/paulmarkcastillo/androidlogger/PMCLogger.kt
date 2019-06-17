@@ -83,7 +83,7 @@ class PMCLogger {
                     dao.addLog(log)
                 }
             } else {
-                System.out.println("[${getPriorityText(priority)}] [$tag] $msg")
+                System.out.println("[${getPriorityText(priority)}] [$tag] $formattedMsg")
             }
         }
 
