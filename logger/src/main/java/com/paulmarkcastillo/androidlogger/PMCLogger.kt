@@ -70,18 +70,20 @@ class PMCLogger {
         }
 
         private fun addLog(priority: Int, tag: String, msg: String) {
+            val formattedMsg = msg.replace(",", " ")
+
             if (!debugMode) {
                 val log = PMCLog(
                     priority = priority,
                     tag = tag,
-                    msg = msg
+                    msg = formattedMsg
                 )
                 CoroutineScope(Dispatchers.IO).launch {
                     val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
                     dao.addLog(log)
                 }
             } else {
-                System.out.println("[${getPriorityText(priority)}] [$tag] $msg")
+                System.out.println("[${getPriorityText(priority)}] [$tag] $formattedMsg")
             }
         }
 
@@ -129,11 +131,11 @@ class PMCLogger {
             return tags
         }
 
-        fun getLogs(priority: Int, tag: String): MutableLiveData<List<PMCLog>> {
+        fun getLogs(priority: Int, tag: String, msg: String): MutableLiveData<List<PMCLog>> {
             val logs = MutableLiveData<List<PMCLog>>()
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                logs.postValue(dao.getAllLogs(priority, "%$tag%"))
+                logs.postValue(dao.getAllLogs(priority, "%$tag%", "%$msg%"))
             }
             return logs
         }
@@ -158,7 +160,7 @@ class PMCLogger {
                     )
 
                     val dao = PMCLogDatabase.getDatabase(applicationContext).logDao()
-                    val logs = dao.getAllLogs(Log.VERBOSE, "%%")
+                    val logs = dao.getAllLogs(Log.VERBOSE, "%%", "%%")
                     logs.forEach {
                         csvWriter.writeNext(
                             arrayOf(
@@ -181,7 +183,6 @@ class PMCLogger {
 
             return statusObservable
         }
-
 
         // Utilities
 

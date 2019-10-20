@@ -32,6 +32,7 @@ class PMCLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pmclog)
+        binding.toolbar.title = setToolbarTitle(PMCLogger.enabled)
         setSupportActionBar(findViewById(R.id.toolbar))
 
         progressDialog = SpotsDialog.Builder().setContext(this).build()
@@ -83,6 +84,10 @@ class PMCLogActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_toggle -> {
+                toggleEnabled()
+                true
+            }
             R.id.menu_clear -> {
                 deleteLogs()
                 true
@@ -105,13 +110,13 @@ class PMCLogActivity : AppCompatActivity() {
                 binding.spinnerTags.selectedItem.toString()
             } else {
                 ""
-            }
+            }, binding.edittextMessage.text.toString()
         )
     }
 
-    private fun displayLogs(priority: String, tag: String) {
+    private fun displayLogs(priority: String, tag: String, msg: String) {
         progressDialog.show()
-        val logsObservable = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag)
+        val logsObservable = PMCLogger.getLogs(PMCLogger.getPriorityValue(priority), tag, msg)
         logsObservable.observe(this, Observer<List<PMCLog>> { log ->
             adapterLogs.submitList(log)
 
@@ -126,12 +131,19 @@ class PMCLogActivity : AppCompatActivity() {
     }
 
     private fun deleteLogs() {
-        progressDialog.show()
-        val logsObservable = PMCLogger.deleteLogs()
-        logsObservable.observe(this, Observer<List<PMCLog>> {
-            binding.spinnerPriority.setSelection(0)
-            refreshLogs()
-        })
+        AlertDialog.Builder(this@PMCLogActivity)
+            .setTitle("Clear Logs")
+            .setMessage("Are you sure you want to clear all logs?")
+            .setPositiveButton("Yes") { _, _ ->
+                progressDialog.show()
+                val logsObservable = PMCLogger.deleteLogs()
+                logsObservable.observe(this, Observer<List<PMCLog>> {
+                    binding.spinnerPriority.setSelection(0)
+                    refreshLogs()
+                })
+            }
+            .setNegativeButton("No") { _, _ -> }
+            .show()
     }
 
     private fun exportLogs() {
@@ -173,5 +185,24 @@ class PMCLogActivity : AppCompatActivity() {
             }
             chooser.show()
         }
+    }
+
+    private fun toggleEnabled() {
+        AlertDialog.Builder(this@PMCLogActivity)
+            .setTitle("Toggle Enabled")
+            .setMessage("Enable logger?")
+            .setPositiveButton("Yes") { _, _ ->
+                PMCLogger.enabled = true
+                binding.toolbar.title = setToolbarTitle(true)
+            }
+            .setNegativeButton("No") { _, _ ->
+                PMCLogger.enabled = false
+                binding.toolbar.title = setToolbarTitle(false)
+            }
+            .show()
+    }
+
+    private fun setToolbarTitle(enabled: Boolean): String {
+        return if (enabled) "PMC Logger (Enabled)" else "PMC Logger (Disabled)"
     }
 }

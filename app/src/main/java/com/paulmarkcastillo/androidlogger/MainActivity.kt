@@ -24,6 +24,13 @@ class MainActivity : AppCompatActivity() {
             PMCLogger.d("tag1", "Single Tag")
             PMCLogger.d("tag1, tag2, tag3", "Multiple Tags")
             PMCLogger.d("Activity Tracking  , Yow     ", "Tags with space")
+            PMCLogger.d("Activity Tracking", "DEBUG")
+            PMCLogger.d("PMCLogger","DEBUG")
+            PMCLogger.d("MainActivity", "Tags with space")
+            PMCLogger.d("PMCLogger", "Tags with space")
+
+            PMCLogger.i("PMCLogger", "Single Tag")
+            PMCLogger.i("MainActivity", "Single Tag")
 
             PMCLogger.viewLogs(this)
         }
