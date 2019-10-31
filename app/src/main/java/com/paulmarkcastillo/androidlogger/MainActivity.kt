@@ -2,7 +2,7 @@ package com.paulmarkcastillo.androidlogger
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.button
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
             PMCLogger.i("PMCLogger", "Single Tag")
             PMCLogger.i("MainActivity", "Single Tag")
+
+            PMCLogger.i("", "Untagged Log")
 
             PMCLogger.viewLogs(this)
         }

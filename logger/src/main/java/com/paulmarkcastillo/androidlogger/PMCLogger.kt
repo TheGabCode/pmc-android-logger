@@ -70,12 +70,13 @@ class PMCLogger {
         }
 
         private fun addLog(priority: Int, tag: String, msg: String) {
+            val formattedTag = if (tag.isBlank()) "(untagged)" else tag
             val formattedMsg = msg.replace(",", " ")
 
             if (!debugMode) {
                 val log = PMCLog(
                     priority = priority,
-                    tag = tag,
+                    tag = formattedTag,
                     msg = formattedMsg
                 )
                 CoroutineScope(Dispatchers.IO).launch {
@@ -83,7 +84,7 @@ class PMCLogger {
                     dao.addLog(log)
                 }
             } else {
-                System.out.println("[${getPriorityText(priority)}] [$tag] $formattedMsg")
+                println("[${getPriorityText(priority)}] [$formattedTag] $formattedMsg")
             }
         }
 
