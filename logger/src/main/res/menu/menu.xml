@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <item
             android:id="@+id/menu_toggle"
-            android:title="Toggle Enabled"
+            android:title="Toggle Enabled/Disabled"
             app:showAsAction="never"
             tools:ignore="HardcodedText" />
     <item
