@@ -195,6 +195,7 @@ class PMCLogActivity : AppCompatActivity() {
                 PMCLogger.enabled = !PMCLogger.enabled
                 binding.toolbar.title = setToolbarTitle(PMCLogger.enabled)
             }
+            .setNegativeButton("No") { _, _ -> }
             .show()
     }
 
