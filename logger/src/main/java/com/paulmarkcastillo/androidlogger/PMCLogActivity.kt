@@ -1,6 +1,8 @@
 package com.paulmarkcastillo.androidlogger
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -27,6 +29,11 @@ class PMCLogActivity : AppCompatActivity() {
     private lateinit var adapterLogs: PMCLogAdapter
     private lateinit var adapterTags: ArrayAdapter<String>
     private lateinit var adapterPriorities: ArrayAdapter<String>
+    private val enabledIntent = Intent()
+
+    companion object {
+        private const val ENABLED = "enabled"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -194,6 +201,7 @@ class PMCLogActivity : AppCompatActivity() {
             .setPositiveButton("Yes") { _, _ ->
                 PMCLogger.enabled = !PMCLogger.enabled
                 binding.toolbar.title = setToolbarTitle(PMCLogger.enabled)
+                enabledIntent.putExtra(ENABLED, PMCLogger.enabled)
             }
             .setNegativeButton("No") { _, _ -> }
             .show()
@@ -201,5 +209,10 @@ class PMCLogActivity : AppCompatActivity() {
 
     private fun setToolbarTitle(enabled: Boolean): String {
         return if (enabled) "PMC Logger (Enabled)" else "PMC Logger (Disabled)"
+    }
+
+    override fun finish() {
+        setResult(Activity.RESULT_OK, enabledIntent)
+        super.finish()
     }
 }

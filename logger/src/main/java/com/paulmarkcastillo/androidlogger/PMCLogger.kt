@@ -36,46 +36,36 @@ class PMCLogger {
 
         fun v(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs && !debugMode) {
-                    Log.v(tag, msg)
-                    addLog(Log.VERBOSE, tag, msg)
-                }
+                if (printLogs && !debugMode) Log.v(tag, msg)
+                addLog(Log.VERBOSE, tag, msg)
             }
         }
 
         fun d(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs && !debugMode) {
-                    Log.d(tag, msg)
-                    addLog(Log.DEBUG, tag, msg)
-                }
+                if (printLogs && !debugMode) Log.d(tag, msg)
+                addLog(Log.DEBUG, tag, msg)
             }
         }
 
         fun i(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs && !debugMode) {
-                    Log.i(tag, msg)
-                    addLog(Log.INFO, tag, msg)
-                }
+                if (printLogs && !debugMode) Log.i(tag, msg)
+                addLog(Log.INFO, tag, msg)
             }
         }
 
         fun w(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs && !debugMode) {
-                    Log.w(tag, msg)
-                    addLog(Log.WARN, tag, msg)
-                }
+                if (printLogs && !debugMode) Log.w(tag, msg)
+                addLog(Log.WARN, tag, msg)
             }
         }
 
         fun e(tag: String, msg: String) {
             if (enabled) {
-                if (printLogs && !debugMode) {
-                    Log.e(tag, msg)
-                    addLog(Log.ERROR, tag, msg)
-                }
+                if (printLogs && !debugMode) Log.e(tag, msg)
+                addLog(Log.ERROR, tag, msg)
             }
         }
 
@@ -102,7 +92,7 @@ class PMCLogger {
 
         fun viewLogs(activity: Activity) {
             val intent = Intent(activity, PMCLogActivity::class.java)
-            activity.startActivity(intent)
+            activity.startActivityForResult(intent, 1)
         }
 
         fun deleteLogs(): MutableLiveData<List<PMCLog>> {
