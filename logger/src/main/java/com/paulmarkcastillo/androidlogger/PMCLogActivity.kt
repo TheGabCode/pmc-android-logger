@@ -33,7 +33,7 @@ class PMCLogActivity : AppCompatActivity() {
 
     companion object {
         const val ENABLED = "enabled"
-        const val REQUEST_CODE = 1
+        const val REQUEST_CODE = 200
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
