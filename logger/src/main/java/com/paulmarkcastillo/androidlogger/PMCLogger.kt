@@ -7,6 +7,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.opencsv.CSVWriter
+import com.paulmarkcastillo.androidlogger.PMCLogActivity.Companion.REQUEST_CODE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -92,7 +93,7 @@ class PMCLogger {
 
         fun viewLogs(activity: Activity) {
             val intent = Intent(activity, PMCLogActivity::class.java)
-            activity.startActivityForResult(intent, 1)
+            activity.startActivityForResult(intent, REQUEST_CODE)
         }
 
         fun deleteLogs(): MutableLiveData<List<PMCLog>> {

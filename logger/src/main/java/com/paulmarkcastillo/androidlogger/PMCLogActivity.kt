@@ -32,7 +32,8 @@ class PMCLogActivity : AppCompatActivity() {
     private val enabledIntent = Intent()
 
     companion object {
-        private const val ENABLED = "enabled"
+        const val ENABLED = "enabled"
+        const val REQUEST_CODE = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
